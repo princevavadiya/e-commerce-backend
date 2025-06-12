@@ -25,7 +25,10 @@ app.use('/api/order', orderRouter)
 
 
 // api endpoints 
-
+ 
+app.get("/",(req, res) => {
+  res.send("Hello World");
+})
 app.get("/hello", (req, res) => {
   res.json({message: "hello World"});
 })
