@@ -1,12 +1,8 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "path": "/",
-      "dest": "/"
-    },
-    {
-      "path": "/hello",
-      "dest": "/hello"
+      "source": "/(.*)",
+      "destination": "/"
     }
   ]
 }
