@@ -26,8 +26,8 @@ app.use('/api/order', orderRouter)
 
 // api endpoints 
 
-app.get("/", (req, res) => {
-  res.send("API Working ");
+app.get("/hello", (req, res) => {
+  res.json({message: "hello World"});
 })
 
 app.listen(port, () => {
