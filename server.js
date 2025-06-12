@@ -8,6 +8,7 @@ import productRouter from "./routes/productRoute.js";
 import cartrouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import bodyParser from "body-parser";
+import nodemailer from "nodemailer";
 // config
 const app = express();
 const port = process.env.PORT || 5000;
@@ -43,13 +44,14 @@ app.post("/send-mail", async (req, res) => {
     service: "gmail",
     auth: {
       user: "vavadiyaprince999@gmail.com",
-      pass: "vuoufkeigmehktxq", 
+      pass: "vuoufkeigmehktxq",
     },
   });
 
   const mailOptions = {
-    from: email,
-    to: "vavadiyaprince999@gmail.com", 
+    from: "vavadiyaprince999@gmail.com",
+    to:email ,
+    replyTo: email,   
     subject: "I Will Connect you from Work.",
 
   };
@@ -59,7 +61,7 @@ app.post("/send-mail", async (req, res) => {
     res.status(200).json({ success: true, message: "Mail sent!" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: "Mail sending failed." });
+    res.status(500).json({ success: false, message: "Mail sending failed.", error });
   }
 });
 
