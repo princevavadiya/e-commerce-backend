@@ -1,17 +1,12 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "crons": [
+  "routes": [
     {
-      "path": "/api/every-minute",
-      "schedule": "* * * * *"
+      "path": "/",
+      "dest": "/"
     },
     {
-      "path": "/api/every-hour",
-      "schedule": "0 * * * *"
-    },
-    {
-      "path": "/api/every-day",
-      "schedule": "0 0 * * *"
+      "path": "/hello",
+      "dest": "/hello"
     }
   ]
 }
