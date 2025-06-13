@@ -2,6 +2,7 @@ import validator from "validator";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import userModel from "../models/userModel.js"
+import { resetPasswordService, sendResetPasswordLink } from "../middleware/auth.js";
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET_KEY)
@@ -70,8 +71,6 @@ const registerUser = async (req, res) => {
     console.log(error)
     res.json({ success: false, message: error.message })
   }
-
-
 }
 // Route for admin login
 
@@ -94,6 +93,58 @@ const adminLogin = async (req, res) => {
   }
 
 }
+const forgetPassword = async (req, res) => {
+  const { email } = req.body
+  if (!email) {
+    return res.status(400).json({ success: false, message: "email is required" })
+  }
 
 
-export { loginUser, registerUser, adminLogin }
+
+  try {
+    const response = await sendResetPasswordLink(email)
+    if (response.success) {
+      return res.status(200).json(response);
+    }
+    else {
+      return res.status(401).json(response)
+    }
+
+
+
+
+  } catch (error) {
+    console.error("Login error", error)
+    return { success: false, message: "Login Failed.Please try again later.", }
+  }
+
+
+}
+const resetPassword = async (req, res) => {
+  const { token, password } = req.body
+  if (!token, !password) {
+    return res.status(400).json({ success: false, message: "password is required" })
+  }
+
+  try {
+
+    const response = await resetPasswordService(token,password)
+
+    if (response.success) {
+      return res.status(200).json(response);
+    }
+    else {
+      return res.status(401).json(response)
+    }
+
+
+
+
+  } catch (error) {
+    console.error("Login error", error)
+    return { success: false, message: "Login Failed.Please try again later.", }
+  }
+
+}
+
+export { loginUser, registerUser, adminLogin, forgetPassword, resetPassword }
