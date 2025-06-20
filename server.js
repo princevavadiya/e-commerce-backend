@@ -9,6 +9,7 @@ import cartrouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import bodyParser from "body-parser";
 import nodemailer from "nodemailer";
+import couponRoutes from "./routes/couponRoutes.js";
 // config
 const app = express();
 const port = process.env.PORT || 5000;
@@ -19,23 +20,20 @@ connectCloudinary();
 
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 // api endpoints
 app.use('/api/user', userRouter)
 app.use('/api/product', productRouter)
 app.use('/api/cart', cartrouter)
 app.use('/api/order', orderRouter)
-
+app.use("/api/coupon",couponRoutes)
 
 // api endpoints 
 
 app.get("/", (req, res) => {
   res.send("Hello World");
 })
-app.get("/hello", (req, res) => {
-  res.json({ message: "hello World" });
-})
-app.use(cors());
-app.use(bodyParser.json());
+
 app.post("/send-mail", async (req, res) => {
   const { email } = req.body;
 
@@ -50,8 +48,8 @@ app.post("/send-mail", async (req, res) => {
 
   const mailOptions = {
     from: "vavadiyaprince999@gmail.com",
-    to:email ,
-    replyTo: email,   
+    to: email,
+    replyTo: email,
     subject: "I Will Connect you from Work.",
 
   };

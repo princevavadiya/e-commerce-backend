@@ -4,6 +4,7 @@ const resertToken = 'jejdxdbddhjbjhhbjyuv45'
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 
+
 const authUser = async (req, res, next) => {
 
   const { token } = req.headers
@@ -11,16 +12,27 @@ const authUser = async (req, res, next) => {
     return res.json({ success: false, message: 'Not Authorized Login Again' });
   }
   try {
-
+  
     const token_decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.body.userId = token_decode.id;
+    if (token_decode) {
+      console.log("token_decode", token_decode);
 
-    next();
+      req.userId = token_decode?.id;
+      next();
+
+    } else {
+      return res.status(401).json({ success: false, message: error.message });
+
+    }
+
+
 
 
   } catch (error) {
+
     console.log(error)
-    res.json({ success: false, message: error.message });
+    return res.status(401).json({ success: false, message: error.message });
+
 
 
 

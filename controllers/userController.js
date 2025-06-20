@@ -14,6 +14,8 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body
     const user = await userModel.findOne({ email })
+    req.body.userId = user._id;
+
     if (!user) {
       return res.json({ success: false, message: "User doesn't exists" })
 
@@ -22,7 +24,11 @@ const loginUser = async (req, res) => {
     if (isMatch) {
 
       const token = createToken(user._id)
-      res.json({ success: true, token })
+
+      res.json({ success: true, user: { token, userId: user._id } })
+      console.log("userId", req.body);
+
+
     }
     else {
       res.json({ success: false, message: "Invalid credentials" })
@@ -66,7 +72,8 @@ const registerUser = async (req, res) => {
     const user = await newUser.save()
 
     const token = createToken(user._id)
-    res.json({ success: true, token })
+    req.body.userId = user._id;
+    res.json({ success: true, user: { token, userId: user._id } })
   } catch (error) {
     console.log(error)
     res.json({ success: false, message: error.message })
@@ -128,7 +135,7 @@ const resetPassword = async (req, res) => {
 
   try {
 
-    const response = await resetPasswordService(token,password)
+    const response = await resetPasswordService(token, password)
 
     if (response.success) {
       return res.status(200).json(response);
